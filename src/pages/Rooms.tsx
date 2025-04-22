@@ -1,233 +1,104 @@
-import React, { useState, useMemo } from 'react';
-import { Search, MapPin } from 'lucide-react';
-import ReservationModal from '../components/ReservationModal';
+import { useEffect, useState, useMemo } from 'react';
+import { getAllSalles } from '../services/salleService';
+import { Salle } from '../types/Salle';
+import { MapPin } from 'lucide-react';
 
-interface RoomData {
-  name: string;
-  location: string;
-  description: string;
-  isAvailable: boolean;
-}
+const AfficherSalles = () => {
+  const [salles, setSalles] = useState<Salle[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState<string>('');
 
-interface RoomCardProps extends RoomData {
-  onReserve: () => void;
-}
+  useEffect(() => {
+    getAllSalles()
+      .then((res) => {
+        setSalles(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Erreur lors du chargement des salles:', err);
+        setLoading(false);
+      });
+  }, []);
 
-const RoomCard: React.FC<RoomCardProps> = ({ 
-  name, 
-  location, 
-  description, 
-  isAvailable,
-  onReserve 
-}) => (
-  <div className="card p-6">
-    <div className="flex justify-between items-start mb-4">
-      <h3 className="text-primary text-xl font-medium">{name}</h3>
-      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-        isAvailable 
-          ? 'bg-green-50 text-green-700' 
-          : 'bg-red-50 text-red-700'
-      }`}>
-        {isAvailable ? 'Disponible' : 'Occupée'}
-      </span>
-    </div>
-    
-    <div className="space-y-3 mb-6">
-      <div className="flex items-center gap-2 text-gray-600">
-        <MapPin className="w-4 h-4" aria-hidden="true" />
-        <span className="text-sm">{location}</span>
-      </div>
-      <p className="text-sm text-gray-600">
-        {description}
-      </p>
-    </div>
-
-    <button 
-      className={`w-full py-2.5 rounded-lg text-center font-medium text-sm transition-colors ${
-        isAvailable
-          ? 'bg-primary text-white hover:bg-primary-dark'
-          : 'bg-gray-50 text-gray-400 cursor-not-allowed'
-      }`}
-      disabled={!isAvailable}
-      onClick={onReserve}
-    >
-      {isAvailable ? 'Réserver' : 'Non disponible'}
-    </button>
-  </div>
-);
-
-const Rooms: React.FC = () => {
-  const [selectedRoom, setSelectedRoom] = useState<RoomData | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-
-  const handleReserve = (room: RoomData) => {
-    setSelectedRoom(room);
-    setIsModalOpen(true);
-  };
-
-  const rooms: RoomData[] = [
-    {
-      name: "Amphithéâtre A",
-      location: "Bâtiment Principal",
-      description: "Grand amphithéâtre avec équipement audiovisuel complet",
-      isAvailable: true
-    },
-    {
-      name: "Salle B204",
-      location: "Bâtiment B",
-      description: "Salle de cours avec tables modulables",
-      isAvailable: false
-    },
-    {
-      name: "Laboratoire C103",
-      location: "Bâtiment C",
-      description: "Laboratoire informatique avec postes de travail",
-      isAvailable: true
-    },
-    {
-      name: "Salle de Conférence D1",
-      location: "Bâtiment D",
-      description: "Salle de conférence équipée d'un système de visioconférence",
-      isAvailable: true
-    },
-    {
-      name: "Studio E5",
-      location: "Bâtiment E",
-      description: "Studio multimédia avec équipement audio et vidéo",
-      isAvailable: false
-    },
-    {
-      name: "Salle B103",
-      location: "Bâtiment B",
-      description: "Salle de réunion avec tableau interactif",
-      isAvailable: true
-    },
-    {
-      name: "Laboratoire C205",
-      location: "Bâtiment C",
-      description: "Laboratoire de langues avec cabines individuelles",
-      isAvailable: true
-    },
-    {
-      name: "Amphithéâtre D2",
-      location: "Bâtiment D",
-      description: "Amphithéâtre moderne avec système de sonorisation",
-      isAvailable: true
-    }
-  ];
-
-  // Extraire les locations uniques pour le filtre
+  // Extract unique locations for filtering
   const locations = useMemo(() => {
-    const uniqueLocations = new Set(rooms.map(room => room.location));
+    const uniqueLocations = new Set(salles.map(salle => salle.localisationNom));
     return ['', ...Array.from(uniqueLocations)];
-  }, [rooms]);
+  }, [salles]);
 
-  // Filtrer les salles selon la recherche et le local
-  const filteredRooms = useMemo(() => {
-    return rooms.filter(room => {
-      const matchesSearch = searchQuery === '' || 
-        room.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        room.description.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesLocation = selectedLocation === '' || 
-        room.location === selectedLocation;
+  // Filter salles by location
+  const filteredSalles = useMemo(() => {
+    if (!selectedLocation) return salles;
+    return salles.filter(salle => salle.localisationNom === selectedLocation);
+  }, [salles, selectedLocation]);
 
-      return matchesSearch && matchesLocation;
-    });
-  }, [rooms, searchQuery, selectedLocation]);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <span className="text-gray-500 text-sm">Chargement des salles...</span>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-primary text-2xl font-medium mb-2">
-            Salles disponibles
-          </h1>
-          <p className="text-sm text-gray-600">
-            Recherchez et réservez une salle selon vos critères
-          </p>
-        </header>
+    <div className="p-8 max-w-7xl mx-auto">
+      <h2 className="text-2xl font-semibold text-primary mb-6">
+        Liste des Salles
+      </h2>
 
-        {/* Search Section */}
-        <div className="card p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Search Input */}
-            <div>
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Recherche
-              </label>
-              <div className="relative">
-                <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" aria-hidden="true" />
-                <input
-                  id="search"
-                  type="text"
-                  placeholder="Nom ou description..."
-                  className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Location Select */}
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Local
-              </label>
-              <select 
-                id="location"
-                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none bg-white"
-                value={selectedLocation}
-                onChange={(e) => setSelectedLocation(e.target.value)}
-              >
-                <option value="">Tous les locaux</option>
-                {locations.slice(1).map(location => (
-                  <option key={location} value={location}>
-                    {location}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Date Input */}
-            <div>
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Date
-              </label>
-              <input
-                id="date"
-                type="date"
-                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                defaultValue="2025-04-18"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Room Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filteredRooms.map((room) => (
-            <RoomCard
-              key={room.name}
-              {...room}
-              onReserve={() => handleReserve(room)}
-            />
+      {/* Location Filter */}
+      <div className="mb-6">
+        <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1.5">
+          Filtrer par Localisation
+        </label>
+        <select
+          id="location"
+          className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none bg-white"
+          value={selectedLocation}
+          onChange={(e) => setSelectedLocation(e.target.value)}
+        >
+          <option value="">Tous les locaux</option>
+          {locations.slice(1).map(location => (
+            <option key={location} value={location}>
+              {location}
+            </option>
           ))}
-        </div>
+        </select>
       </div>
 
-      {selectedRoom && (
-        <ReservationModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          room={selectedRoom}
-        />
+      {filteredSalles.length === 0 ? (
+        <p className="text-gray-600">Aucune salle trouvée pour cette localisation.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {filteredSalles.map((salle) => (
+            <div
+              key={salle.id}
+              className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 hover:shadow-lg transition-all"
+            >
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  {salle.nom}
+                </h3>
+                <div className="flex items-center text-sm text-gray-500">
+                  <MapPin className="w-4 h-4 mr-1" />
+                  {salle.localisationNom}
+                </div>
+              </div>
+              <p className="text-sm text-gray-700 mb-4">
+                {salle.description || 'Pas de description disponible.'}
+              </p>
+              <button
+                className="w-full bg-primary text-white text-sm font-medium py-2 rounded-lg hover:bg-primary-dark transition-colors"
+                disabled
+              >
+                Réserver
+              </button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
-export default Rooms; 
+export default AfficherSalles;
