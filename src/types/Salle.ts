@@ -2,7 +2,9 @@ export interface Salle {
     id: number;
     nom: string;
     description?: string;
-    localisationNom: string;
+    localisation : {
+      nom: string;
+    };
   }
   
   export interface SalleRequest {
