@@ -11,9 +11,7 @@ export interface Reservation {
     id: number;
     nom: string;
     description: string;
-    localisation : {
-      nom: string;
-    };
+    localisationNom: string;
   };
   utilisateur: Utilisateur;
   statut: ReservationStatus;

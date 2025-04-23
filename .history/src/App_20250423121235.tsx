@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/salles" element={<Rooms />} />
-          <Route path="/reservations" element={<Reservations />} />
+          <Route path="/ reservations" element={<Reservations />} />
           {/* Redirect any unknown routes to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

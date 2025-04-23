@@ -1,4 +1,4 @@
-// import { Salle } from "./Salle";
+import { Salle } from "./Salle";
 import { Utilisateur } from "./Utilisateur";
 
 export type ReservationStatus = 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE';
@@ -11,9 +11,7 @@ export interface Reservation {
     id: number;
     nom: string;
     description: string;
-    localisation : {
-      nom: string;
-    };
+    localisationNom: string;
   };
   utilisateur: Utilisateur;
   statut: ReservationStatus;

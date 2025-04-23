@@ -1,7 +1,7 @@
 import { api } from '../api/axios';
 import { Reservation } from '../types/Reservation';
 
-const USER_ID = 2; // TODO: Get this from authentication context
+const USER_ID = 1; // TODO: Get this from authentication context
 
 export const getUserReservations = () => 
   api.get<Reservation[]>(`/reservations/user/${USER_ID}`);

@@ -79,7 +79,7 @@ const ReservationCard = ({ reservation, onCancel }: { reservation: Reservation; 
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4" />
-            <span>{reservation.salle.localisation.nom}</span>
+            <span>{<reservation className="salle localisation"></reservation>om}</span>
           </div>
         </div>
       </div>

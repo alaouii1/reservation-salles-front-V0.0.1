@@ -10,8 +10,6 @@ export interface Salle {
   export interface SalleRequest {
     nom: string;
     description?: string;
-    localisation : {
-      nom: string;
-    };
+    localisationNom: string;
   }
   
