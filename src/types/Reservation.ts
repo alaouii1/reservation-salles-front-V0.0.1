@@ -1,3 +1,6 @@
+import { Salle } from "./Salle";
+import { Utilisateur } from "./Utilisateur";
+
 export type ReservationStatus = 'en_attente' | 'confirmee' | 'annulee';
 
 export interface Reservation {
@@ -10,4 +13,6 @@ export interface Reservation {
   status: ReservationStatus;
   userId: number;
   createdAt: string;
-} 
+  salle: Salle;
+  utilisateur: Utilisateur;
+}

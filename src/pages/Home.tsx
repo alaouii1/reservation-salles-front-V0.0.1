@@ -1,5 +1,6 @@
 import React from 'react';
 import { CalendarDays, Clock, MapPin, History } from 'lucide-react';
+import ProchaineReservation from '../components/ProchaineReservation';
 
 interface ReservationCardProps {
   title: string;
@@ -7,6 +8,8 @@ interface ReservationCardProps {
   children: React.ReactNode;
   className?: string;
 }
+
+
 
 const ReservationCard: React.FC<ReservationCardProps> = ({ title, icon, children, className = '' }) => (
   <div className={`bg-white rounded-2xl p-6 shadow-sm ${className}`}>
@@ -34,24 +37,14 @@ const Home: React.FC = () => {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <ReservationCard 
-            title="Prochaine réservation" 
-            icon={<CalendarDays className="w-5 h-5 text-indigo-600" />}
-          >
-            <div>
-              <h3 className="text-xl font-medium mb-2">Amphithéâtre A</h3>
-              <div className="space-y-2 text-gray-600">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span>18 avril 2025, 14:00 - 16:00</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>Central</span>
-                </div>
-              </div>
-            </div>
-          </ReservationCard>
+        <ReservationCard title="Prochaine réservation" 
+            icon={<CalendarDays className="w-5 h-5 text-indigo-600" />}>
+
+        <ProchaineReservation />
+        </ReservationCard>
+       
+
+
 
           <ReservationCard 
             title="Dernière action" 

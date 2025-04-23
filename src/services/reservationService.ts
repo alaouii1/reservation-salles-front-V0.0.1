@@ -1,3 +1,4 @@
+import { api } from '../api/axios';
 import { Reservation } from '../types/Reservation';
 import { mockReservations } from '../mocks/reservationsMock';
 
@@ -9,6 +10,8 @@ export const cancelReservation = (id: number) =>
   Promise.resolve({ 
     data: mockReservations.find(r => r.id === id)
   });
+
+  export const getNextReservation = () => api.get<Reservation>('http://localhost:8080/api/reservations/next/1');
 
 export const createReservation = (data: {
   salleId: number;
