@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ReservationCardProps {
   title: string;
-  icon: React.ReactElement<{ className?: string }>;
+  icon: React.ReactElement<{ className?: string }>; // Specify that icon accepts className
   children: React.ReactNode;
   className?: string;
 }
@@ -13,6 +13,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
   children, 
   className = '' 
 }) => {
+  // Safely clone the icon element with className
   const iconWithClass = React.cloneElement(icon, {
     className: `w-6 h-6 text-indigo-600 ${icon.props.className || ''}`
   });

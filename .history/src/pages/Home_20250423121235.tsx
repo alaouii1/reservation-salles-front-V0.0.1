@@ -1,40 +1,34 @@
 import React from 'react';
 import { CalendarDays, Clock, MapPin, History } from 'lucide-react';
 import ProchaineReservation from '../components/ProchaineReservation';
-import ReservationCard from '../components/ReservationCard';
+
+interface ReservationCardProps {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}
 
 
 
-
-
-// const ReservationCard: React.FC<ReservationCardProps> = ({ title, icon, children, className = '' }) => (
-//   <div className={`bg-white rounded-2xl p-6 shadow-sm ${className}`}>
-//     <div className="flex items-center gap-3 mb-4">
-//       {icon}
-//       <h2 className="text-lg font-medium text-indigo-600">{title}</h2>
-//     </div>
-//     {children}
-//   </div>
-// );
+const ReservationCard: React.FC<ReservationCardProps> = ({ title, icon, children, className = '' }) => (
+  <div className={`bg-white rounded-2xl p-6 shadow-sm ${className}`}>
+    <div className="flex items-center gap-3 mb-4">
+      {icon}
+      <h2 className="text-lg font-medium text-indigo-600">{title}</h2>
+    </div>
+    {children}
+  </div>
+);
 
 const Home: React.FC = () => {
-    const getGreeting = () => {
-      const currentHour = new Date().getHours();
-      if (currentHour < 12) {
-        return 'Bonjour';
-      } else if (currentHour < 18) {
-        return 'Bon après-midi';
-      } else {
-        return 'Bonsoir';
-      }
-    };
   return (
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-medium">
-            {getGreeting()}, Dr. Dupont <span role="img" aria-label="wave">👋</span>
+          <h1 className="text-2xl font-medium">
+            Bonjour, Dr. Dupont <span role="img" aria-label="wave">👋</span>
           </h1>
           <button className="text-gray-600 hover:text-gray-800">
             Prêt à réserver une salle ?

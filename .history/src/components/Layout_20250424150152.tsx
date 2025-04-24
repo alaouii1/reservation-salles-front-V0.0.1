@@ -1,7 +1,11 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-import Sidebar from "./Sidebar";
+import Sidebar from './Sidebar';
+
+
+
+
 
 const Layout: React.FC = () => {
   return (
@@ -14,4 +18,4 @@ const Layout: React.FC = () => {
   );
 };
 
-export default Layout;
+export default Layout; 

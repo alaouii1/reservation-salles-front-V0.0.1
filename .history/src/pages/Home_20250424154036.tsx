@@ -1,9 +1,13 @@
 import React from 'react';
 import { CalendarDays, Clock, MapPin, History } from 'lucide-react';
 import ProchaineReservation from '../components/ProchaineReservation';
-import ReservationCard from '../components/ReservationCard';
 
-
+interface ReservationCardProps {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}
 
 
 

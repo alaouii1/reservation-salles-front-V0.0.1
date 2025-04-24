@@ -256,18 +256,23 @@ const AfficherSalles = () => {
             <p className="text-gray-600 mb-6 text-sm leading-relaxed">
               {salle.description || 'Pas de description disponible.'}
             </p>
-            <div className="flex justify-end mt-auto">
-  <button
-    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-      salle.id % 2 === 0
-        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg'
-        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-    }`}
-    disabled={salle.id % 2 !== 0}
-  >
-    {salle.id % 2 === 0 ? 'Réserver' : 'Indisponible'}
-  </button>
-</div>
+
+            <div className="flex items-center justify-between mt-auto">
+              <div className="flex items-center text-sm text-gray-500">
+                <Users className="w-4 h-4 mr-1" />
+                <span>Capacité: {salle.capacite || 'N/A'}</span>
+              </div>
+              <button
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  salle.id % 2 === 0
+                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg'
+                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                }`}
+                disabled={salle.id % 2 !== 0}
+              >
+                {salle.id % 2 === 0 ? 'Réserver' : 'Indisponible'}
+              </button>
+            </div>
           </div>
         ))}
       </div>
