@@ -281,17 +281,6 @@ const [showReservationModal, setShowReservationModal] = useState(false);
           </div>
         ))}
       </div>
-      {selectedRoom && (
-  <ReservationModal
-    isOpen={showReservationModal}
-    onClose={() => setShowReservationModal(false)}
-    room={{
-      name: selectedRoom.nom,
-      location: selectedRoom.localisationNom,
-      description: selectedRoom.description || 'Pas de description disponible.'
-    }}
-  />
-)}
     </div>
   );
 };
